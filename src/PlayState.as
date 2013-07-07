@@ -5,37 +5,65 @@ package
 
   public class PlayState extends FlxState
   {
+    public static const STATES:Object = {
+      TITLE: "title",
+      EXPLAIN: "explain",
+      PLAYING: "playing"
+    }
+    private var state:String;
+
     private var background:FlxSprite;
     private var vignette:FlxSprite;
     private var woly:WolyweuxGroup;
-    private var greenPixel:FlxSprite;
+    private var greenPixel:FlxButton;
+    private var cursor:FlxSprite;
 
     private var logo:FlxGroup;
+
+    public function PlayState(state:String="title") {
+      this.state = state;
+    }
 
     override public function create():void {
       background = new FlxSprite();
       background.loadGraphic(Assets.Background);
+      background.scrollFactor.y = 0.9;
       add(background);
 
       vignette = new FlxSprite();
       vignette.loadGraphic(Assets.Vignette);
       vignette.blend = "multiply";
+      vignette.scrollFactor.x = vignette.scrollFactor.y = 0;
       add(vignette);
-      FlxFlod.playMod(Assets.PowarThrust);
+//      FlxFlod.playMod(Assets.PowarThrust);
 //      add(new ThoughtGroup());
-      logo = new LogoGroup();
-      add(logo);
+      if(state == STATES.TITLE) {
+        logo = new LogoGroup();
+        add(logo);
+      }
 
       woly = new WolyweuxGroup();
       add(woly)
 
-      greenPixel = new FlxSprite(137, 166);
+      greenPixel = new FlxButton(137, 166);
       greenPixel.makeGraphic(46,46,0xff35f14f);
+      greenPixel.onUp = function():void { 
+        if(state == STATES.TITLE) {
+          logo.visible = false;
+          state = STATES.EXPLAIN;
+        }
+      };
       add(greenPixel);
+
+      cursor = new FlxSprite(0,0);
+      cursor.makeGraphic(16,16,0xfff22311);
+      add(cursor);
     }
 
     override public function update():void {
-      if(FlxG.mouse.justPressed()) { FlxG.switchState(new GameState()); }
+      cursor.x = FlxG.mouse.x;
+      cursor.y = FlxG.mouse.y;
+
       super.update();
     }
   }

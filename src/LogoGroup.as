@@ -16,7 +16,7 @@ package
     public function LogoGroup(X:Number=0,Y:Number=0) {
       super();
       logo = new FlxSprite();
-      logo.loadGraphic(Assets.Logo, false, false, 73-41);
+      logo.loadGraphic(Assets.Logo);
 
       var s:FlxSprite;
 

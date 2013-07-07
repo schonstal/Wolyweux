@@ -30,7 +30,7 @@ package
 
     override public function update():void {
       sinAmt += FlxG.elapsed / SIN_RATE;
-      var sin = Math.sin(sinAmt);
+      var sin:Number = Math.sin(sinAmt);
       wolyweuxGlow.offset.y = wolyweux.offset.y = Math.floor(sin * 5);
       wolyweuxGlow.alpha = 0.325 - (sin * 0.1);
       shadow.alpha = 0.875 - (sin * 0.125);

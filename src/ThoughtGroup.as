@@ -96,8 +96,12 @@ package
       });
     }
 
-    private function writeText():void {
-      thought.y = textHeight[text.length-1];
+    public function writeText(text:Array=null):void {
+      thought.text = "";
+      characterIndex = 0;
+      textIndex = 0;
+      if(text != null) this.text = text;
+      thought.y = textHeight[this.text.length-1];
       textIndex = 0;
     }
 

@@ -5,11 +5,10 @@ package
 
   public class PlayState extends FlxState
   {
-    private var wolyweux:FlxSprite;
-    private var wolyweuxGlow:FlxSprite;
-    private var shadow:FlxSprite;
     private var background:FlxSprite;
     private var vignette:FlxSprite;
+    private var woly:WolyweuxGroup;
+    private var greenPixel:FlxSprite;
 
     private var logo:FlxGroup;
 
@@ -22,24 +21,17 @@ package
       vignette.loadGraphic(Assets.Vignette);
       vignette.blend = "multiply";
       add(vignette);
-//      FlxFlod.playMod(Assets.PowarThrust);
+      FlxFlod.playMod(Assets.PowarThrust);
 //      add(new ThoughtGroup());
       logo = new LogoGroup();
       add(logo);
 
-      wolyweux = new FlxSprite(112,95);
-      wolyweux.loadGraphic(Assets.Wolyweux);
-      add(wolyweux);
+      woly = new WolyweuxGroup();
+      add(woly)
 
-      wolyweuxGlow = new FlxSprite(131,130);
-      wolyweuxGlow.loadGraphic(Assets.WolyweuxGlow);
-      wolyweuxGlow.blend = "screen";
-      wolyweuxGlow.alpha = 32.5;
-      add(wolyweuxGlow);
-
-      shadow = new FlxSprite(124,218);
-      shadow.loadGraphic(Assets.Shadow);
-      add(shadow);
+      greenPixel = new FlxSprite(137, 166);
+      greenPixel.makeGraphic(46,46,0xff35f14f);
+      add(greenPixel);
     }
 
     override public function update():void {

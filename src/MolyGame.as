@@ -8,7 +8,7 @@ package
   public class MolyGame extends FlxGame
   {
     public function MolyGame() {
-      super(176,136,BadingState,4);
+      super(320,240,PlayState,2);
 //      forceDebugger = true;
 //      FlxG.debug = true;
 //      FlxG.visualDebug = true;

@@ -10,6 +10,6 @@ package
     [Embed(source = "../data/powar_thrust.mod", mimeType="application/octet-stream")] public static var PowarThrust:Class;
 
 
-//    [Embed(source = '../data/adore64.ttf', fontFamily="adore", embedAsCFF="false")] public var Adore:String;
+    [Embed(source = '../data/04b03.ttf', fontFamily="04b03", embedAsCFF="false")] public var ZeroFour:String;
   }
 }

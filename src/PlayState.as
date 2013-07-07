@@ -5,9 +5,9 @@ package
 
   public class PlayState extends FlxState
   {
-
     override public function create():void {
-      FlxFlod.playMod(Assets.PowarThrust);
+//      FlxFlod.playMod(Assets.PowarThrust);
+      add(new ThoughtGroup());
     }
 
     override public function update():void {
@@ -17,6 +17,7 @@ package
       if(FlxG.keys.DOWN) {
         FlxFlod.tempo--;
       }
+      if(FlxG.mouse.justPressed()) { FlxG.switchState(new GameState()); }
       super.update();
     }
   }

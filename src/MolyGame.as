@@ -10,8 +10,8 @@ package
     public function MolyGame() {
       super(320,240,PlayState,2);
 //      forceDebugger = true;
-//      FlxG.debug = true;
-//      FlxG.visualDebug = true;
+      FlxG.debug = true;
+      FlxG.visualDebug = true;
     }
   }
 }

@@ -18,7 +18,7 @@ package
     private var greenPixel:FlxButton;
     private var cursor:FlxSprite;
 
-    private var logo:FlxGroup;
+    private var logo:LogoGroup;
 
     public function PlayState(state:String="title") {
       this.state = state;
@@ -35,10 +35,12 @@ package
       vignette.blend = "multiply";
       vignette.scrollFactor.x = vignette.scrollFactor.y = 0;
       add(vignette);
-//      FlxFlod.playMod(Assets.PowarThrust);
+
+      FlxFlod.playMod(Assets.Woly);
 //      add(new ThoughtGroup());
+
       if(state == STATES.TITLE) {
-        logo = new LogoGroup();
+        logo = new LogoGroup(25,28);
         add(logo);
       }
 
@@ -49,7 +51,9 @@ package
       greenPixel.makeGraphic(46,46,0xff35f14f);
       greenPixel.onUp = function():void { 
         if(state == STATES.TITLE) {
-          logo.visible = false;
+          logo.dismiss(function():void {
+            add(new ThoughtGroup());
+          });
           state = STATES.EXPLAIN;
         }
       };

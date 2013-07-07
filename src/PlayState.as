@@ -119,8 +119,7 @@ package
       }
       add(scoreText);
 
-      cursor = new FlxSprite(0,0);
-      cursor.loadGraphic(Assets.Pointer);
+      cursor = new Cursor();
       add(cursor);
 
       if(G.games.length == 0) G.games = GAMES.concat();
@@ -151,8 +150,6 @@ package
       glowSin += (FlxG.elapsed/1) * 2 * Math.PI;
       pixelGlow.alpha = Math.sin(glowSin) * 0.2 + 0.8;
 
-      cursor.x = FlxG.mouse.x;
-      cursor.y = FlxG.mouse.y;
       scoreText.text = '' + G.score;
 
       super.update();

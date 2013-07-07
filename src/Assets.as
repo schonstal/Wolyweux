@@ -23,5 +23,8 @@ package
     [Embed(source = "../data/pointer.png")] public static var Pointer:Class;
     [Embed(source = "../data/pixelGlow.png")] public static var PixelGlow:Class;
     [Embed(source = "../data/thoughtBubbles.png")] public static var ThoughtBubbles:Class;
+
+    //Phone
+    [Embed(source = "../data/cellPhone/cellPhone.png")] public static var CellPhone:Class;
   }
 }

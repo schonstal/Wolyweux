@@ -12,7 +12,9 @@ package
     public const STATES:Object = {
       STARTING: "starting",
       PLAYING: "playing",
-      RESULTS: "results"
+      LOST: "lost",
+      WON: "won",
+      LEAVING: "leaving"
     };
 
     protected var time:Number = 5;
@@ -56,7 +58,7 @@ package
       };
 
       for (var key:String in tweenPositions) {
-        TweenLite.to(transitionSquares[key], TWEEN_TIME, {
+        TweenLite.to(transitionSquares[key], TWEEN_TIME/FlxG.timeScale, {
           x: tweenPositions[key][0],
           y: tweenPositions[key][1],
           ease: Quart.easeInOut,
@@ -74,9 +76,43 @@ package
         case STATES.PLAYING:
           time -= FlxG.elapsed;
           timerText.text = "" + Math.ceil(time);
+          if(time <= 0) {
+            lose();
+          }
+          break;
+        case STATES.LOST:
+        case STATES.WON:
+          var tweenPositions:Object = {
+            left: [0, 0],
+            up: [0, 0],
+            right: [FlxG.width/2, 0],
+            down: [0, FlxG.height/2]
+          };
+
+          for (var key:String in tweenPositions) {
+            TweenLite.to(transitionSquares[key], TWEEN_TIME/FlxG.timeScale, {
+              x: tweenPositions[key][0],
+              y: tweenPositions[key][1],
+              ease: Quart.easeInOut,
+              onComplete: function():void {
+                FlxG.switchState(new PlayState());
+              }
+            });
+          }
+
+          state = STATES.LEAVING;
           break;
       }
       super.update();
+    }
+
+    protected function win():void {
+      //Mark game as won
+      state = STATES.WON;
+    }
+
+    protected function lose():void {
+      state = STATES.LOST;
     }
   }
 }

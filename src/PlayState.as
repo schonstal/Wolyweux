@@ -2,6 +2,8 @@ package
 {
   import org.flixel.*;
   import org.flixel.plugin.photonstorm.FlxFlod;
+  import com.greensock.*;
+  import com.greensock.easing.*;
 
   public class PlayState extends FlxState
   {
@@ -110,7 +112,15 @@ package
       var gameState:Class = G.games.shift();
       thoughts.writeText(gameState.DESCRIPTION);
       new FlxTimer().start(TEXT_TIME, 1, function():void {
-        FlxG.switchState(new gameState());
+        TweenLite.to(FlxG.camera.scroll, 0.75/FlxG.timeScale, {
+          y: greenPixel.y - FlxG.height/2,
+          ease: Quad.easeInOut,
+          onComplete: function():void {
+            new FlxTimer().start(0.5, 1, function():void {
+              FlxG.switchState(new gameState());
+            });
+          }
+        });
       });
     }
 

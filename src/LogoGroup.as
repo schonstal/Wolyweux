@@ -12,7 +12,7 @@ package
     public static const SIN_FREQ:Number = 1;
     public static const SIN_OFFSET:Number = 1;
     public static const OSC_AMT:Number = 5;
-    public static const TWEEN_TIME:Number = 0.5;
+    public static const TWEEN_TIME:Number = 0.033;
 
     private var logo:FlxSprite;
     private var letters:Array = [];

@@ -52,7 +52,7 @@ package
       greenPixel.onUp = function():void { 
         if(state == STATES.TITLE) {
           logo.dismiss(function():void {
-            add(new ThoughtGroup());
+            add(new ThoughtGroup(["What do the taps do?"]));
           });
           state = STATES.EXPLAIN;
         }

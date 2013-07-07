@@ -18,6 +18,7 @@ package
     [Embed(source = "../data/logo.png")] public static var Logo:Class;
     [Embed(source = "../data/background.png")] public static var Background:Class;
     [Embed(source = "../data/vignette.png")] public static var Vignette:Class;
+    [Embed(source = "../data/pointer.png")] public static var Pointer:Class;
     [Embed(source = "../data/thoughtBubbles.png")] public static var ThoughtBubbles:Class;
   }
 }

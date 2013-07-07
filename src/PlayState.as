@@ -57,12 +57,13 @@ package
       greenPixel.makeGraphic(46,46,0xff35f14f);
       greenPixel.onUp = function():void { 
         if(state == STATES.TITLE) {
+          cursor.visible = false;
           logo.dismiss(function():void {
             thoughts = new ThoughtGroup(["Oh Green Pixel,", "what secrets do you keep?"]);
             add(thoughts);
             (new FlxTimer()).start(5, 1, function():void {
               thoughts.writeText(["Show me something,", "make me weep."]); 
-              new FlxTimer().start(4, 1, function():void {
+              new FlxTimer().start(3.5, 1, function():void {
                 thoughts.writeText(["..."],0.5);
                 new FlxTimer().start(2.5, 1, function():void {
                   thoughts.writeText(["Eureka!"]);
@@ -91,10 +92,10 @@ package
       add(scoreText);
 
       cursor = new FlxSprite(0,0);
-      cursor.makeGraphic(16,16,0xfff22311);
+      cursor.loadGraphic(Assets.Pointer);
       add(cursor);
 
-      if(G.games.length == 0) G.games = GAMES;
+      if(G.games.length == 0) G.games = GAMES.concat();
     }
 
     override public function update():void {

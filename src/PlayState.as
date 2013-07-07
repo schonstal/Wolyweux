@@ -10,6 +10,7 @@ package
       EXPLAIN: "explain",
       PLAYING: "playing"
     }
+    public static const TEXT_TIME = 5;
     private var state:String;
 
     private var background:FlxSprite;
@@ -17,6 +18,7 @@ package
     private var woly:WolyweuxGroup;
     private var greenPixel:FlxButton;
     private var cursor:FlxSprite;
+    private var thoughts:ThoughtGroup;
 
     private var logo:LogoGroup;
 
@@ -52,7 +54,11 @@ package
       greenPixel.onUp = function():void { 
         if(state == STATES.TITLE) {
           logo.dismiss(function():void {
-            add(new ThoughtGroup(["What do the taps do?"]));
+            thoughts = new ThoughtGroup(["What does the Green Pixel", "have to show me today?"]);
+            add(thoughts);
+            (new FlxTimer()).start(TEXT_TIME, 1, function() {
+              thoughts.writeText(["butts butts", "poop"]); 
+            });
           });
           state = STATES.EXPLAIN;
         }

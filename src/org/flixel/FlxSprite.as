@@ -19,6 +19,7 @@ package org.flixel
 	public class FlxSprite extends FlxObject
 	{
 		[Embed(source="data/default.png")] protected var ImgDefault:Class;
+    public var pixelOffset:Number = 0;
 		
 		/**
 		 * WARNING: The origin of the sprite will default to its center.
@@ -906,7 +907,7 @@ package org.flixel
 				indexX = (_flipped<<1)-indexX-frameWidth;
 			
 			//Update display bitmap
-			_flashRect.x = indexX;
+			_flashRect.x = indexX + pixelOffset;
 			_flashRect.y = indexY;
 			framePixels.copyPixels(_pixels,_flashRect,_flashPointZero);
 			_flashRect.x = _flashRect.y = 0;

@@ -7,9 +7,9 @@ package
 
   public class GameState extends FlxState
   {
-    public const TRANSITION_COLOR:uint = 0xff33ff33;
-    public const TWEEN_TIME:Number = 0.5;
-    public const STATES:Object = {
+    public static const TRANSITION_COLOR:uint = 0xff35f14f;
+    public static const TWEEN_TIME:Number = 0.5;
+    public static const STATES:Object = {
       STARTING: "starting",
       PLAYING: "playing",
       LOST: "lost",
@@ -17,10 +17,12 @@ package
       LEAVING: "leaving"
     };
 
+    public static const DESCRIPTION:Array = ["You forgot to add", "a description"];
+
     protected var time:Number = 5;
     protected var timerText:FlxText;
 
-    protected var music:Class = Assets.PowarThrust;
+//    protected var music:Class = Assets.PowarThrust;
     protected var state:String = STATES.STARTING;
 
     private var transitionSquares:Object = {};
@@ -52,9 +54,9 @@ package
       
       var tweenPositions:Object = {
         left: [-FlxG.width/2, 0],
-        up: [0, -FlxG.height/2],
+        up: [0, -FlxG.width/2],
         right: [FlxG.width, 0],
-        down: [0, FlxG.height]
+        down: [0, FlxG.width]
       };
 
       for (var key:String in tweenPositions) {

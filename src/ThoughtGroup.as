@@ -6,9 +6,10 @@ package
 
   public class ThoughtGroup extends FlxGroup
   {
-    public static const TWEEN_TIME:Number = 0.125;
+    public static const TWEEN_TIME:Number = 0.2;
+    public static const DISMISS_TIME:Number = 0.15;
     public static const TWEEN_UP_AMT:Number = 10;
-    public static const LETTER_TIME:Number = 0.05;
+    public static const LETTER_TIME:Number = 0.033;
 
     private var thought:FlxText;
 
@@ -22,6 +23,7 @@ package
     private var characterIndex:Number = 0;
     private var textIndex:Number = 10;
     private var textTimer:Number = 0;
+    private var letterTime:Number = LETTER_TIME;
 
     public function ThoughtGroup(text:Array) {
       this.text = text;
@@ -59,7 +61,7 @@ package
       bigBubbles.push(box);
       add(box);
       
-      thought = new FlxText(40,2,230,"");
+      thought = new FlxText(0,2,FlxG.width,"");
       thought.alignment = "center";
       thought.font = "04b03";
       thought.size = 16;
@@ -86,7 +88,9 @@ package
                   y: bigBubbles[i].y - TWEEN_UP_AMT,
                   ease: Quart.easeInOut,
                   onComplete: function():void {
-                    writeText();
+                    new FlxTimer().start(0.5, 1, function():void {
+                      writeText();
+                    });
                   }
                 });
               }
@@ -96,19 +100,48 @@ package
       });
     }
 
-    public function writeText(text:Array=null):void {
+    public function dismiss(callback:Function):void {
+      thought.text = "";
+      TweenLite.to(firstBubble, DISMISS_TIME/FlxG.timeScale, {
+        alpha: 0,
+        y: firstBubble.y - TWEEN_UP_AMT,
+        ease: Quart.easeInOut,
+        onComplete: function():void {
+          TweenLite.to(secondBubble, DISMISS_TIME/FlxG.timeScale, {
+            alpha: 0,
+            y: secondBubble.y - TWEEN_UP_AMT,
+            ease: Quart.easeInOut,
+            onComplete: function():void {
+              for(var i:int=0; i < bigBubbles.length; i++) {
+                TweenLite.to(bigBubbles[i], DISMISS_TIME/FlxG.timeScale, {
+                  alpha: 0,
+                  y: bigBubbles[i].y - TWEEN_UP_AMT,
+                  ease: Quart.easeInOut,
+                  onComplete: function():void {
+                    callback();
+                  }
+                });
+              }
+            }
+          });
+        }
+      });
+    }
+
+    public function writeText(text:Array=null, time:Number = LETTER_TIME):void {
       thought.text = "";
       characterIndex = 0;
       textIndex = 0;
       if(text != null) this.text = text;
       thought.y = textHeight[this.text.length-1];
       textIndex = 0;
+      letterTime = time;
     }
 
     public override function update():void {
       if(textIndex < text.length) {
         textTimer += FlxG.elapsed;
-        if(textTimer >= LETTER_TIME) {
+        if(textTimer >= letterTime) {
           thought.text += text[textIndex].charAt(characterIndex);
           characterIndex++;
           if(characterIndex >= text[textIndex].length) {

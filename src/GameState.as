@@ -1,7 +1,6 @@
 package
 {
   import org.flixel.*;
-  import org.flixel.plugin.photonstorm.FlxFlod;
   import com.greensock.*;
   import com.greensock.easing.*;
 
@@ -22,14 +21,12 @@ package
     protected var time:Number = 5;
     protected var timerText:FlxText;
 
-//    protected var music:Class = Assets.PowarThrust;
+    protected var music:Class = Assets.Woly;
     protected var state:String = STATES.STARTING;
 
     private var transitionSquares:Object = {};
 
     override public function create():void {
-//      FlxFlod.playMod(music);
-
       timerText = new FlxText(5,5,FlxG.width,"");
       timerText.font  = "04b03";
       timerText.color = 0xffffff;
@@ -66,6 +63,7 @@ package
           ease: Quart.easeInOut,
           onComplete: function():void {
             state = STATES.PLAYING;
+            MusicPlayer.play(music);
           }
         });
       }
@@ -97,7 +95,7 @@ package
               y: tweenPositions[key][1],
               ease: Quart.easeInOut,
               onComplete: function():void {
-                FlxG.switchState(new PlayState());
+                FlxG.switchState(new PlayState(PlayState.STATES.PLAYING));
               }
             });
           }

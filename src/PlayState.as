@@ -1,7 +1,6 @@
 package
 {
   import org.flixel.*;
-  import org.flixel.plugin.photonstorm.FlxFlod;
   import com.greensock.*;
   import com.greensock.easing.*;
 
@@ -32,7 +31,7 @@ package
 
     private var logo:LogoGroup;
 
-    public function PlayState(state:String="playing") {
+    public function PlayState(state:String="title") {
       this.state = state;
       if(state == STATES.TITLE) G.score = 0;
     }
@@ -49,6 +48,9 @@ package
       vignette.scrollFactor.x = vignette.scrollFactor.y = 0;
       add(vignette);
 
+      if(state == STATES.TITLE) {
+        MusicPlayer.play(Assets.Woly, true);
+      }
 //      FlxFlod.playMod(Assets.Woly);
 //      add(new ThoughtGroup());
 
@@ -74,7 +76,8 @@ package
               new FlxTimer().start(3.5, 1, function():void {
                 thoughts.writeText(["..."],0.5);
                 new FlxTimer().start(2.5, 1, function():void {
-                  thoughts.writeText(["Eureka!"]);
+                  thoughts.writeText(["Eureka!"],0);
+                  MusicPlayer.stop()
                   new FlxTimer().start(3, 1, function():void {
                     playGame();
                     state = STATES.PLAYING;
@@ -156,6 +159,7 @@ package
     }
 
     private function playGame():void {
+      MusicPlayer.play(Assets.PowarThrust)
       var gameState:Class = G.games.shift();
 
       if(thoughts == null) {

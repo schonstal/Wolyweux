@@ -13,7 +13,7 @@ package
       music = Assets.WolyDerp1;
 
       phoneSprite = new FlxSprite();
-      phoneSprite.loadGraphic(Assets.CellPhone, true, false, 240); 
+      phoneSprite.loadGraphic(Assets.CellPhone, true, false, 320); 
       phoneSprite.addAnimation("idle", [0]);
       phoneSprite.addAnimation("win", [1]);
       add(phoneSprite);
@@ -28,6 +28,7 @@ package
       if(FlxG.mouse.justPressed()) {
         cursor.visible = false;
         phoneSprite.play("win");
+        won = true;
       }
       super.update();
     }

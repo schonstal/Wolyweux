@@ -24,6 +24,8 @@ package
     protected var music:Class = Assets.Woly;
     protected var state:String = STATES.STARTING;
 
+    protected var won:Boolean = false;
+
     private var transitionSquares:Object = {};
 
     override public function create():void {
@@ -77,7 +79,7 @@ package
           time -= FlxG.elapsed;
           timerText.text = "" + Math.ceil(time);
           if(time <= 0) {
-            lose();
+            won ? win() : lose();
           }
           break;
         case STATES.LOST:
@@ -88,6 +90,7 @@ package
             right: [FlxG.width/2, 0],
             down: [0, FlxG.height/2]
           };
+          G.score++;
 
           for (var key:String in tweenPositions) {
             TweenLite.to(transitionSquares[key], TWEEN_TIME/FlxG.timeScale, {

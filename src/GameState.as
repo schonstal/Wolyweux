@@ -7,7 +7,7 @@ package
 
   public class GameState extends FlxState
   {
-    public static const TRANSITION_COLOR:uint = 0xff33ff33;
+    public static const TRANSITION_COLOR:uint = 0xff35f14f;
     public static const TWEEN_TIME:Number = 0.5;
     public static const STATES:Object = {
       STARTING: "starting",
@@ -54,9 +54,9 @@ package
       
       var tweenPositions:Object = {
         left: [-FlxG.width/2, 0],
-        up: [0, -FlxG.height/2],
+        up: [0, -FlxG.width/2],
         right: [FlxG.width, 0],
-        down: [0, FlxG.height]
+        down: [0, FlxG.width]
       };
 
       for (var key:String in tweenPositions) {

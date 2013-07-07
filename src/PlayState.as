@@ -14,20 +14,25 @@ package
     }
     public static const GAMES:Array = [PhoneGame]
 
-    public static const TEXT_TIME:Number = 4;
+    public static const PAN_TIME:Number = 0.75;
+    public static const TEXT_TIME:Number = 5;
+
     private var state:String;
 
     private var background:FlxSprite;
     private var vignette:FlxSprite;
     private var woly:WolyweuxGroup;
     private var greenPixel:FlxButton;
+    private var pixelGlow:FlxSprite;
     private var cursor:FlxSprite;
     private var thoughts:ThoughtGroup;
     private var scoreText:FlxText;
 
+    private var glowSin:Number = 0;
+
     private var logo:LogoGroup;
 
-    public function PlayState(state:String="title") {
+    public function PlayState(state:String="playing") {
       this.state = state;
       if(state == STATES.TITLE) G.score = 0;
     }
@@ -35,7 +40,7 @@ package
     override public function create():void {
       background = new FlxSprite();
       background.loadGraphic(Assets.Background);
-      background.scrollFactor.y = 0.9;
+      background.scrollFactor.y = 0.75;
       add(background);
 
       vignette = new FlxSprite();
@@ -59,6 +64,7 @@ package
       greenPixel.makeGraphic(46,46,0xff35f14f);
       greenPixel.onUp = function():void { 
         if(state == STATES.TITLE) {
+          pixelGlow.visible = false;
           cursor.visible = false;
           logo.dismiss(function():void {
             thoughts = new ThoughtGroup(["Oh Green Pixel,", "what secrets do you keep?"]);
@@ -81,9 +87,26 @@ package
           state = STATES.EXPLAIN;
         }
       };
+      greenPixel.onOver = function():void {
+        if(state == STATES.TITLE) {
+          pixelGlow.visible = true;
+        }
+      };
+      greenPixel.onOut = function():void {
+        pixelGlow.visible = false;
+      };
+
       add(greenPixel);
 
+      pixelGlow = new FlxSprite(105, 134);
+      pixelGlow.blend = "add";
+      pixelGlow.alpha = 0.8;
+      pixelGlow.loadGraphic(Assets.PixelGlow);
+      pixelGlow.visible = false;
+      add(pixelGlow);
+
       scoreText = new FlxText(FlxG.width - 38, FlxG.height - 22, 32, "fdsfdas" + G.score);
+      scoreText.scrollFactor.y = 0;
       scoreText.font = "04b03";
       scoreText.color = 0xff000000;
       scoreText.size = 16;
@@ -98,9 +121,33 @@ package
       add(cursor);
 
       if(G.games.length == 0) G.games = GAMES.concat();
+
+      if(state == STATES.PLAYING) {
+        FlxG.camera.scroll.y = greenPixel.y - (FlxG.height/2 - greenPixel.height/2);
+        greenPixel.scale.x = greenPixel.scale.y = FlxG.width/greenPixel.width;
+        TweenLite.to(greenPixel.scale, GameState.TWEEN_TIME/FlxG.timeScale, {
+          x: 1,
+          y: 1,
+          ease: Quart.easeInOut,
+          onComplete: function():void {
+            TweenLite.to(FlxG.camera.scroll, PAN_TIME/FlxG.timeScale, {
+              y: 0,
+              ease: Quad.easeInOut,
+              onComplete: function():void {
+                playGame();
+              }
+            });
+          }
+        });
+        cursor.visible = false;
+      }
+
     }
 
     override public function update():void {
+      glowSin += (FlxG.elapsed/1) * 2 * Math.PI;
+      pixelGlow.alpha = Math.sin(glowSin) * 0.2 + 0.8;
+
       cursor.x = FlxG.mouse.x;
       cursor.y = FlxG.mouse.y;
       scoreText.text = '' + G.score;
@@ -110,16 +157,30 @@ package
 
     private function playGame():void {
       var gameState:Class = G.games.shift();
-      thoughts.writeText(gameState.DESCRIPTION);
+
+      if(thoughts == null) {
+        thoughts = new ThoughtGroup(gameState.DESCRIPTION);
+        add(thoughts);
+      } else {
+        thoughts.writeText(gameState.DESCRIPTION);
+      }
+
       new FlxTimer().start(TEXT_TIME, 1, function():void {
-        TweenLite.to(FlxG.camera.scroll, 0.75/FlxG.timeScale, {
-          y: greenPixel.y - FlxG.height/2,
-          ease: Quad.easeInOut,
-          onComplete: function():void {
-            new FlxTimer().start(0.5, 1, function():void {
-              FlxG.switchState(new gameState());
-            });
-          }
+        thoughts.dismiss(function():void {
+          TweenLite.to(FlxG.camera.scroll, PAN_TIME/FlxG.timeScale, {
+            y: greenPixel.y - (FlxG.height/2 - greenPixel.height/2),
+            ease: Quad.easeInOut,
+            onComplete: function():void {
+              TweenLite.to(greenPixel.scale, GameState.TWEEN_TIME/FlxG.timeScale, {
+                x: FlxG.width/greenPixel.width,
+                y: FlxG.width/greenPixel.width,
+                ease: Quart.easeInOut,
+                onComplete: function():void {
+                  FlxG.switchState(new gameState());
+                }
+              });
+            }
+          });
         });
       });
     }

@@ -7,6 +7,7 @@ package
   public class ThoughtGroup extends FlxGroup
   {
     public static const TWEEN_TIME:Number = 0.2;
+    public static const DISMISS_TIME:Number = 0.15;
     public static const TWEEN_UP_AMT:Number = 10;
     public static const LETTER_TIME:Number = 0.033;
 
@@ -90,6 +91,34 @@ package
                     new FlxTimer().start(0.5, 1, function():void {
                       writeText();
                     });
+                  }
+                });
+              }
+            }
+          });
+        }
+      });
+    }
+
+    public function dismiss(callback:Function):void {
+      thought.text = "";
+      TweenLite.to(firstBubble, DISMISS_TIME/FlxG.timeScale, {
+        alpha: 0,
+        y: firstBubble.y - TWEEN_UP_AMT,
+        ease: Quart.easeInOut,
+        onComplete: function():void {
+          TweenLite.to(secondBubble, DISMISS_TIME/FlxG.timeScale, {
+            alpha: 0,
+            y: secondBubble.y - TWEEN_UP_AMT,
+            ease: Quart.easeInOut,
+            onComplete: function():void {
+              for(var i:int=0; i < bigBubbles.length; i++) {
+                TweenLite.to(bigBubbles[i], DISMISS_TIME/FlxG.timeScale, {
+                  alpha: 0,
+                  y: bigBubbles[i].y - TWEEN_UP_AMT,
+                  ease: Quart.easeInOut,
+                  onComplete: function():void {
+                    callback();
                   }
                 });
               }

@@ -8,7 +8,7 @@ package
     [Embed(source = "../data/bading.mp3")] public static var BaDing:Class;
 
     [Embed(source = "../data/xm/woly_title.xm", mimeType="application/octet-stream")] public static var Woly:Class;
-    [Embed(source = "../data/wolyderp1.mod", mimeType="application/octet-stream")] public static var WolyDerp1:Class;
+    [Embed(source = "../data/xm/wolyderp1.xm", mimeType="application/octet-stream")] public static var WolyDerp1:Class;
     [Embed(source = "../data/powar_thrust.mod", mimeType="application/octet-stream")] public static var PowarThrust:Class;
     [Embed(source = "../data/xm/woly_between.xm", mimeType="application/octet-stream")] public static var WolyBetween:Class;
     [Embed(source = "../data/xm/woly_gameover.xm", mimeType="application/octet-stream")] public static var WolyGameOver:Class;

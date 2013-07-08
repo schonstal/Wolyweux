@@ -96,6 +96,8 @@ package
           state = STATES.PLAYING;
           G.score = 0;
           G.games = ArrayHelper.shuffle(GAMES.concat());
+          pixelGlow.visible = false;
+          cursor.visible = false;
           playGame();
         }
       };
@@ -132,7 +134,12 @@ package
       cursor = new Cursor();
       add(cursor);
 
-      if(G.games.length == 0) G.games = ArrayHelper.shuffle(GAMES.concat());
+      if(G.games.length == 0) {
+        G.games = ArrayHelper.shuffle(GAMES.concat());
+        if(state != STATES.TITLE) {
+          FlxG.timeScale += 0.1;
+        }
+      }
 
       if(state == STATES.PLAYING || state == STATES.GAME_OVER) {
         FlxG.camera.scroll.y = greenPixel.y - (FlxG.height/2 - greenPixel.height/2);

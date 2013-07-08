@@ -66,6 +66,7 @@ package
       greenPixel = new FlxButton(137, 166);
       greenPixel.makeGraphic(46,46,0xff35f14f);
       greenPixel.onUp = function():void { 
+        if(!cursor.visible) return;
         if(state == STATES.TITLE) {
           pixelGlow.visible = false;
           cursor.visible = false;
@@ -89,18 +90,17 @@ package
               });
             });
           });
-          if(state == STATES.GAME_OVER) {
-            trace('hello');
-            state = STATES.PLAYING;
-            G.score = 0;
-            G.games = ArrayHelper.shuffle(GAMES);
-            playGame();
-          } else {
-            state = STATES.EXPLAIN;
-          }
+          state = STATES.EXPLAIN;
+        }
+        if(state == STATES.GAME_OVER) {
+          state = STATES.PLAYING;
+          G.score = 0;
+          G.games = ArrayHelper.shuffle(GAMES.concat());
+          playGame();
         }
       };
       greenPixel.onOver = function():void {
+        if(!cursor.visible) return;
         if(state == STATES.TITLE || (state == STATES.GAME_OVER && FlxG.camera.scroll.y <= 0)) {
           pixelGlow.visible = true;
         }
@@ -132,7 +132,7 @@ package
       cursor = new Cursor();
       add(cursor);
 
-      if(G.games.length == 0) G.games = [ButtocksGame];//ArrayHelper.shuffle(GAMES);
+      if(G.games.length == 0) G.games = ArrayHelper.shuffle(GAMES.concat());
 
       if(state == STATES.PLAYING || state == STATES.GAME_OVER) {
         FlxG.camera.scroll.y = greenPixel.y - (FlxG.height/2 - greenPixel.height/2);
@@ -168,13 +168,16 @@ package
     }
 
     private function gameOver():void {
-      cursor.visible = true;
+      FlxG.timeScale = 1;
       var txt:Array = ["Looks like I'm out of ideas.", "At least I created", '' + G.score + " new games today!"];
 
       MusicPlayer.play(Assets.WolyGameOver)
       if(thoughts == null) {
         thoughts = new ThoughtGroup(txt);
         add(thoughts);
+        new FlxTimer().start(5, 1, function():void {
+          cursor.visible = true;
+        });
       } else {
         thoughts.writeText(txt);
       }

@@ -36,9 +36,10 @@ package
     [Embed(source = "../data/cellPhone/button.mp3")] public static var ButtonSound:Class;
 
     //buttocks
-    [Embed(source = "../data/buttocks/butts.png")] public static var Butts:Class;
+    [Embed(source = "../data/buttocks/buttPointy.png")] public static var ButtPointy:Class;
+    [Embed(source = "../data/buttocks/buttRound.png")] public static var ButtRound:Class;
+    [Embed(source = "../data/buttocks/buttSqaure.png")] public static var ButtSquare:Class;
     [Embed(source = "../data/buttocks/dialog.png")] public static var Dialog:Class;
     [Embed(source = "../data/buttocks/screen.png")] public static var Screen:Class;
-    [Embed(source = "../data/buttocks/selector.png")] public static var Selector:Class;
   }
 }

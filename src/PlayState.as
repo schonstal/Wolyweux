@@ -1,7 +1,6 @@
 package
 {
   import org.flixel.*;
-  import org.flixel.plugin.photonstorm.FlxFlod;
   import com.greensock.*;
   import com.greensock.easing.*;
 
@@ -10,9 +9,10 @@ package
     public static const STATES:Object = {
       TITLE: "title",
       EXPLAIN: "explain",
-      PLAYING: "playing"
+      PLAYING: "playing",
+      GAME_OVER: "game over" //GAME OVER YEAH
     }
-    public static const GAMES:Array = [PhoneGame]
+    public static const GAMES:Array = [PhoneGame, ButtocksGame, ZuneKissGame];
 
     public static const PAN_TIME:Number = 0.75;
     public static const TEXT_TIME:Number = 5;
@@ -32,7 +32,7 @@ package
 
     private var logo:LogoGroup;
 
-    public function PlayState(state:String="playing") {
+    public function PlayState(state:String="title") {
       this.state = state;
       if(state == STATES.TITLE) G.score = 0;
     }
@@ -49,12 +49,17 @@ package
       vignette.scrollFactor.x = vignette.scrollFactor.y = 0;
       add(vignette);
 
+      if(state == STATES.TITLE) {
+        MusicPlayer.play(Assets.Woly, true);
+      }
 //      FlxFlod.playMod(Assets.Woly);
 //      add(new ThoughtGroup());
 
+      logo = new LogoGroup(25,28);
+      logo.visible = false;
+      add(logo);
       if(state == STATES.TITLE) {
-        logo = new LogoGroup(25,28);
-        add(logo);
+        logo.visible = true;
       }
 
       woly = new WolyweuxGroup();
@@ -63,7 +68,9 @@ package
       greenPixel = new FlxButton(137, 166);
       greenPixel.makeGraphic(46,46,0xff35f14f);
       greenPixel.onUp = function():void { 
+        if(!cursor.visible) return;
         if(state == STATES.TITLE) {
+          FlxG.play(Assets.StartSound, 0.3);
           pixelGlow.visible = false;
           cursor.visible = false;
           logo.dismiss(function():void {
@@ -74,7 +81,9 @@ package
               new FlxTimer().start(3.5, 1, function():void {
                 thoughts.writeText(["..."],0.5);
                 new FlxTimer().start(2.5, 1, function():void {
-                  thoughts.writeText(["Eureka!"]);
+                  FlxG.play(Assets.EurekaSound);
+                  thoughts.writeText(["Eureka!"],0);
+                  MusicPlayer.stop()
                   new FlxTimer().start(3, 1, function():void {
                     playGame();
                     state = STATES.PLAYING;
@@ -86,9 +95,22 @@ package
           });
           state = STATES.EXPLAIN;
         }
+        if(state == STATES.GAME_OVER && scoreText.visible == true) {
+          FlxG.play(Assets.StartSound, 0.3);
+          G.score = 0;
+          scoreText.visible = false;
+          thoughts.dismiss(function():void {
+            new FlxTimer().start(1, 1, function():void {
+              logo.visible = true;
+              MusicPlayer.play(Assets.Woly);
+              state = STATES.TITLE;
+            });
+          });
+        }
       };
       greenPixel.onOver = function():void {
-        if(state == STATES.TITLE) {
+        if(!cursor.visible) return;
+        if(state == STATES.TITLE || (state == STATES.GAME_OVER && FlxG.camera.scroll.y <= 0)) {
           pixelGlow.visible = true;
         }
       };
@@ -116,13 +138,17 @@ package
       }
       add(scoreText);
 
-      cursor = new FlxSprite(0,0);
-      cursor.loadGraphic(Assets.Pointer);
+      cursor = new Cursor();
       add(cursor);
 
-      if(G.games.length == 0) G.games = GAMES.concat();
+      if(G.games.length == 0) {
+        G.games = ArrayHelper.shuffle(GAMES.concat());
+        if(state != STATES.TITLE) {
+          FlxG.timeScale += 0.1;
+        }
+      }
 
-      if(state == STATES.PLAYING) {
+      if(state == STATES.PLAYING || state == STATES.GAME_OVER) {
         FlxG.camera.scroll.y = greenPixel.y - (FlxG.height/2 - greenPixel.height/2);
         greenPixel.scale.x = greenPixel.scale.y = FlxG.width/greenPixel.width;
         TweenLite.to(greenPixel.scale, GameState.TWEEN_TIME/FlxG.timeScale, {
@@ -134,11 +160,13 @@ package
               y: 0,
               ease: Quad.easeInOut,
               onComplete: function():void {
-                playGame();
+                if(state == STATES.PLAYING) playGame();
+                else gameOver();
               }
             });
           }
         });
+
         cursor.visible = false;
       }
 
@@ -148,14 +176,29 @@ package
       glowSin += (FlxG.elapsed/1) * 2 * Math.PI;
       pixelGlow.alpha = Math.sin(glowSin) * 0.2 + 0.8;
 
-      cursor.x = FlxG.mouse.x;
-      cursor.y = FlxG.mouse.y;
       scoreText.text = '' + G.score;
 
       super.update();
     }
 
+    private function gameOver():void {
+      FlxG.timeScale = 1;
+      var txt:Array = ["Looks like I'm out of ideas.", "At least I created", '' + G.score + " new games today!"];
+
+      MusicPlayer.play(Assets.WolyGameOver)
+      if(thoughts == null) {
+        thoughts = new ThoughtGroup(txt);
+        add(thoughts);
+        new FlxTimer().start(5, 1, function():void {
+          cursor.visible = true;
+        });
+      } else {
+        thoughts.writeText(txt);
+      }
+    }
+
     private function playGame():void {
+      MusicPlayer.play(Assets.WolyBetween)
       var gameState:Class = G.games.shift();
 
       if(thoughts == null) {

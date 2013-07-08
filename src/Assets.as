@@ -13,6 +13,7 @@ package
     [Embed(source = "../data/xm/woly_between.xm", mimeType="application/octet-stream")] public static var WolyBetween:Class;
     [Embed(source = "../data/xm/woly_gameover.xm", mimeType="application/octet-stream")] public static var WolyGameOver:Class;
     [Embed(source = "../data/xm/buttselect.xm", mimeType="application/octet-stream")] public static var WolyButt:Class;
+    [Embed(source = "../data/xm/kiss_zune.xm", mimeType="application/octet-stream")] public static var WolyZune:Class;
 
     [Embed(source = '../data/04b03.ttf', fontFamily="04b03", embedAsCFF="false")] public var ZeroFour:String;
 
@@ -28,6 +29,7 @@ package
     [Embed(source = "../data/thoughtBubbles.png")] public static var ThoughtBubbles:Class;
 
     [Embed(source = "../data/eureka.mp3")] public static var EurekaSound:Class;
+    [Embed(source = "../data/woly_startbutton.mp3")] public static var StartSound:Class;
 
     //Phone
     [Embed(source = "../data/cellPhone/cellPhone.png")] public static var CellPhone:Class;
@@ -41,5 +43,13 @@ package
     [Embed(source = "../data/buttocks/buttSqaure.png")] public static var ButtSquare:Class;
     [Embed(source = "../data/buttocks/dialog.png")] public static var Dialog:Class;
     [Embed(source = "../data/buttocks/screen.png")] public static var Screen:Class;
+    [Embed(source = "../data/buttocks/correct_butt.mp3")] public static var CorrectButtSound:Class;
+    [Embed(source = "../data/buttocks/wrong_butt.mp3")] public static var WrongButtSound:Class;
+
+    //Physical Love
+    [Embed(source = "../data/physicalLove/journal.png")] public static var Journal:Class;
+    [Embed(source = "../data/physicalLove/lips.png")] public static var Lips:Class;
+    [Embed(source = "../data/physicalLove/lipstick.png")] public static var Lipstick:Class;
+    [Embed(source = "../data/physicalLove/kiss.mp3")] public static var KissSound:Class;
   }
 }

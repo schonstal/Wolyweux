@@ -12,7 +12,7 @@ package
       PLAYING: "playing",
       GAME_OVER: "game over" //GAME OVER YEAH
     }
-    public static const GAMES:Array = [PhoneGame, ButtocksGame];
+    public static const GAMES:Array = [PhoneGame, ButtocksGame, ZuneKissGame];
 
     public static const PAN_TIME:Number = 0.75;
     public static const TEXT_TIME:Number = 5;
@@ -32,7 +32,7 @@ package
 
     private var logo:LogoGroup;
 
-    public function PlayState(state:String="playing") {
+    public function PlayState(state:String="title") {
       this.state = state;
       if(state == STATES.TITLE) G.score = 0;
     }
@@ -55,9 +55,11 @@ package
 //      FlxFlod.playMod(Assets.Woly);
 //      add(new ThoughtGroup());
 
+      logo = new LogoGroup(25,28);
+      logo.visible = false;
+      add(logo);
       if(state == STATES.TITLE) {
-        logo = new LogoGroup(25,28);
-        add(logo);
+        logo.visible = true;
       }
 
       woly = new WolyweuxGroup();
@@ -68,6 +70,7 @@ package
       greenPixel.onUp = function():void { 
         if(!cursor.visible) return;
         if(state == STATES.TITLE) {
+          FlxG.play(Assets.StartSound, 0.3);
           pixelGlow.visible = false;
           cursor.visible = false;
           logo.dismiss(function():void {
@@ -92,13 +95,17 @@ package
           });
           state = STATES.EXPLAIN;
         }
-        if(state == STATES.GAME_OVER) {
-          state = STATES.PLAYING;
+        if(state == STATES.GAME_OVER && scoreText.visible == true) {
+          FlxG.play(Assets.StartSound, 0.3);
           G.score = 0;
-          G.games = ArrayHelper.shuffle(GAMES.concat());
-          pixelGlow.visible = false;
-          cursor.visible = false;
-          playGame();
+          scoreText.visible = false;
+          thoughts.dismiss(function():void {
+            new FlxTimer().start(1, 1, function():void {
+              logo.visible = true;
+              MusicPlayer.play(Assets.Woly);
+              state = STATES.TITLE;
+            });
+          });
         }
       };
       greenPixel.onOver = function():void {

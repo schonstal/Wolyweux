@@ -4,9 +4,10 @@ package
 
   public class Cursor extends FlxSprite
   {
-    public function Cursor() {
+    public function Cursor(graphic:Class=null) {
       super();
-      loadGraphic(Assets.Pointer);
+      if(graphic == null) graphic = Assets.Pointer;
+      loadGraphic(graphic);
     }
 
     public override function update():void {

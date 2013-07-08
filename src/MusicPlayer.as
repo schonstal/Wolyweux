@@ -27,6 +27,10 @@ package
       playing = true;
     }
 
+    public static function setVolume(n:Number):void {
+      player.volume = n;
+    }
+
      public static function stop():void {
        player.stop();
        playing = false;

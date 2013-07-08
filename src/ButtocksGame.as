@@ -23,7 +23,7 @@ package
       computerSprite.loadGraphic(Assets.Screen, false, false, 320); 
       add(computerSprite);
 
-      var herButt:FlxSprite = new FlxSprite(66, 96);
+      var herButt:FlxSprite = new FlxSprite(64, 96);
       herButt.visible = false;
 
       buttOrder = ArrayHelper.shuffle(butts);
@@ -37,11 +37,13 @@ package
           cursor.visible = false;
           if(buttNum == WINNING_BUTT) {
             won = true;
+            FlxG.play(Assets.CorrectButtSound, 0.7);
             new FlxTimer().start(0.5, 1, function():void {
               dialog.visible = true;
               dialog.play("win");
             });
           } else {
+            FlxG.play(Assets.WrongButtSound, 0.7);
             new FlxTimer().start(0.5, 1, function():void {
               dialog.visible = true;
               dialog.play("lose");

@@ -9,9 +9,10 @@ package
     public static const STATES:Object = {
       TITLE: "title",
       EXPLAIN: "explain",
-      PLAYING: "playing"
+      PLAYING: "playing",
+      GAME_OVER: "game over" //GAME OVER YEAH
     }
-    public static const GAMES:Array = [PhoneGame]
+    public static const GAMES:Array = [PhoneGame, ButtocksGame];
 
     public static const PAN_TIME:Number = 0.75;
     public static const TEXT_TIME:Number = 5;
@@ -31,7 +32,7 @@ package
 
     private var logo:LogoGroup;
 
-    public function PlayState(state:String="title") {
+    public function PlayState(state:String="playing") {
       this.state = state;
       if(state == STATES.TITLE) G.score = 0;
     }
@@ -76,6 +77,7 @@ package
               new FlxTimer().start(3.5, 1, function():void {
                 thoughts.writeText(["..."],0.5);
                 new FlxTimer().start(2.5, 1, function():void {
+                  FlxG.play(Assets.EurekaSound);
                   thoughts.writeText(["Eureka!"],0);
                   MusicPlayer.stop()
                   new FlxTimer().start(3, 1, function():void {
@@ -88,10 +90,17 @@ package
             });
           });
           state = STATES.EXPLAIN;
+          if(state == STATES.GAME_OVER) {
+            trace('hello');
+            state = STATES.PLAYING;
+            G.score = 0;
+            G.games = ArrayHelper.shuffle(GAMES);
+            playGame();
+          }
         }
       };
       greenPixel.onOver = function():void {
-        if(state == STATES.TITLE) {
+        if(state == STATES.TITLE || (state == STATES.GAME_OVER && FlxG.camera.scroll.y <= 0)) {
           pixelGlow.visible = true;
         }
       };
@@ -122,9 +131,9 @@ package
       cursor = new Cursor();
       add(cursor);
 
-      if(G.games.length == 0) G.games = GAMES.concat();
+      if(G.games.length == 0) G.games = ArrayHelper.shuffle(GAMES);
 
-      if(state == STATES.PLAYING) {
+      if(state == STATES.PLAYING || state == STATES.GAME_OVER) {
         FlxG.camera.scroll.y = greenPixel.y - (FlxG.height/2 - greenPixel.height/2);
         greenPixel.scale.x = greenPixel.scale.y = FlxG.width/greenPixel.width;
         TweenLite.to(greenPixel.scale, GameState.TWEEN_TIME/FlxG.timeScale, {
@@ -136,11 +145,13 @@ package
               y: 0,
               ease: Quad.easeInOut,
               onComplete: function():void {
-                playGame();
+                if(state == STATES.PLAYING) playGame();
+                else gameOver();
               }
             });
           }
         });
+
         cursor.visible = false;
       }
 
@@ -155,8 +166,21 @@ package
       super.update();
     }
 
+    private function gameOver():void {
+      cursor.visible = true;
+      var txt:Array = ["Looks like I'm out of ideas.", "At least I created", '' + G.score + " new games today!"];
+
+      MusicPlayer.play(Assets.WolyGameOver)
+      if(thoughts == null) {
+        thoughts = new ThoughtGroup(txt);
+        add(thoughts);
+      } else {
+        thoughts.writeText(txt);
+      }
+    }
+
     private function playGame():void {
-      MusicPlayer.play(Assets.PowarThrust)
+      MusicPlayer.play(Assets.WolyBetween)
       var gameState:Class = G.games.shift();
 
       if(thoughts == null) {

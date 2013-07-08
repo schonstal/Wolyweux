@@ -90,7 +90,6 @@ package
             right: [FlxG.width/2, 0],
             down: [0, FlxG.height/2]
           };
-          G.score++;
 
           for (var key:String in tweenPositions) {
             TweenLite.to(transitionSquares[key], TWEEN_TIME/FlxG.timeScale, {
@@ -98,7 +97,7 @@ package
               y: tweenPositions[key][1],
               ease: Quart.easeInOut,
               onComplete: function():void {
-                FlxG.switchState(new PlayState(PlayState.STATES.PLAYING));
+                FlxG.switchState(new PlayState(won ? PlayState.STATES.PLAYING : PlayState.STATES.GAME_OVER));
               }
             });
           }
@@ -109,9 +108,14 @@ package
       super.update();
     }
 
+    public function get playing():Boolean {
+      return state == STATES.PLAYING;
+    }
+
     protected function win():void {
       //Mark game as won
       state = STATES.WON;
+      G.score++;
     }
 
     protected function lose():void {

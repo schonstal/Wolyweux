@@ -7,9 +7,11 @@ package
     [Embed(source = "../data/logo.png")] public static var Splash:Class;
     [Embed(source = "../data/bading.mp3")] public static var BaDing:Class;
 
-    [Embed(source = "../data/woly_.mod", mimeType="application/octet-stream")] public static var Woly:Class;
+    [Embed(source = "../data/xm/woly_title.xm", mimeType="application/octet-stream")] public static var Woly:Class;
     [Embed(source = "../data/wolyderp1.mod", mimeType="application/octet-stream")] public static var WolyDerp1:Class;
     [Embed(source = "../data/powar_thrust.mod", mimeType="application/octet-stream")] public static var PowarThrust:Class;
+    [Embed(source = "../data/xm/woly_between.xm", mimeType="application/octet-stream")] public static var WolyBetween:Class;
+    [Embed(source = "../data/xm/wolyderp2.xm", mimeType="application/octet-stream")] public static var WolyGameOver:Class;
 
     [Embed(source = '../data/04b03.ttf', fontFamily="04b03", embedAsCFF="false")] public var ZeroFour:String;
 
@@ -24,7 +26,18 @@ package
     [Embed(source = "../data/pixelGlow.png")] public static var PixelGlow:Class;
     [Embed(source = "../data/thoughtBubbles.png")] public static var ThoughtBubbles:Class;
 
+    [Embed(source = "../data/eureka.mp3")] public static var EurekaSound:Class;
+
     //Phone
     [Embed(source = "../data/cellPhone/cellPhone.png")] public static var CellPhone:Class;
+    [Embed(source = "../data/cellPhone/airplane.png")] public static var Plane:Class;
+    [Embed(source = "../data/cellPhone/sky.png")] public static var Sky:Class;
+    [Embed(source = "../data/cellPhone/button.mp3")] public static var ButtonSound:Class;
+
+    //buttocks
+    [Embed(source = "../data/cellPhone/cellPhone.png")] public static var CellPhone:Class;
+    [Embed(source = "../data/cellPhone/airplane.png")] public static var Plane:Class;
+    [Embed(source = "../data/cellPhone/sky.png")] public static var Sky:Class;
+    [Embed(source = "../data/cellPhone/button.mp3")] public static var ButtonSound:Class;
   }
 }

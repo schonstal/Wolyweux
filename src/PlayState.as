@@ -89,13 +89,14 @@ package
               });
             });
           });
-          state = STATES.EXPLAIN;
           if(state == STATES.GAME_OVER) {
             trace('hello');
             state = STATES.PLAYING;
             G.score = 0;
             G.games = ArrayHelper.shuffle(GAMES);
             playGame();
+          } else {
+            state = STATES.EXPLAIN;
           }
         }
       };
@@ -131,7 +132,7 @@ package
       cursor = new Cursor();
       add(cursor);
 
-      if(G.games.length == 0) G.games = ArrayHelper.shuffle(GAMES);
+      if(G.games.length == 0) G.games = [ButtocksGame];//ArrayHelper.shuffle(GAMES);
 
       if(state == STATES.PLAYING || state == STATES.GAME_OVER) {
         FlxG.camera.scroll.y = greenPixel.y - (FlxG.height/2 - greenPixel.height/2);
